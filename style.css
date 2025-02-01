@@ -118,7 +118,7 @@ h1{
 
 
     margin: 0 auto;
-    border: 1px solid black;
+
 
     animation: fadeInFromDown 0.4s linear;
 }
@@ -159,7 +159,7 @@ h1{
 }
 /*table*/
 .table{
-    border: 2px solid green;
+
 
     display: flex;
 
@@ -178,6 +178,7 @@ h1{
     justify-content: center;
     align-items: center;
 }
+
 /*CARDS THAT ARE ON YOUR HAND AND ON THE GRID*/
 .onHand{
 
@@ -190,7 +191,9 @@ h1{
     animation: sway 0.5s linear infinite;
     transform-origin: center;
 }
-
+.notEmptyGrid{
+    
+}
 /*ANIMATIONS*/
 @keyframes fadeIn {
     from {

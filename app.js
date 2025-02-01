@@ -37,7 +37,7 @@ function makeCardsPlayable(){
         cardsOnHand[i].style.animationDelay = "0s";
         
         // Only allow selecting cards that are still on hand
-        if (!cardsOnHand[i].classList.contains("onGrid")) {
+        if (cardsOnHand[i].classList.contains("onHand")) {
             cardsOnHand[i].addEventListener('click', function() {
                 selectCard(cardsOnHand[i]);
             });
@@ -52,9 +52,6 @@ function makeCardsPlayable(){
                 placeCardOnGrid(selectedCard, gridItem); 
                 
                 selectedCard.classList.remove('clickedCard');
-                selectedCard.classList.add('onGrid');
-                
-                selectedCard.style.pointerEvents = 'none'; 
             }
         });
     });
@@ -71,9 +68,9 @@ function selectCard(card){ // TODO: diselect when the click is on random part of
     card.classList.toggle("clickedCard");
 }
 
-function placeCardOnGrid(card, target) { //TODO: THERE IS A BUG WHERE YOU CAN PLACE A CARD ON GRIDS THAT WENT FULL AFTER GAME START
-    if (target.classList.contains("notEmptyGrid")) return; // Prevent placing on full slots
-    
+function placeCardOnGrid(card, target) { 
+    if (!target.classList.contains("notEmptyGrid") && !target.classList.contains("onGrid")) // Prevent placing on full slots
+    {
     const cardRect = card.getBoundingClientRect();
     const targetRect = target.getBoundingClientRect();
     
@@ -113,7 +110,8 @@ function placeCardOnGrid(card, target) { //TODO: THERE IS A BUG WHERE YOU CAN PL
         newCard.classList.remove("clickedCard");
         target.classList.add("notEmptyGrid"); // Mark grid as full
         
-    }, 450);
+    }, 500);
+}
 }
 
 
@@ -174,7 +172,7 @@ startTheGameButton.addEventListener('click',function(){
             }
             setTimeout(makeCardsPlayable, delay+500)
             
-    }   , 16*160);
+    }   , 16*140);
    
     
 })

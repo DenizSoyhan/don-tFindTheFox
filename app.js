@@ -6,6 +6,67 @@ const deck = document.querySelector(".deck");
 const gridItems = document.querySelectorAll(".gridItem");
 const cardHolders = document.querySelectorAll(".cardHolder");
 
+
+function animateCardMovement(card, target) {
+    const cardRect = card.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+
+    const deltaX = targetRect.left + targetRect.width / 2 - (cardRect.left + cardRect.width / 2);
+    const deltaY = targetRect.top + targetRect.height / 2 - (cardRect.top + cardRect.height / 2);
+
+
+    // Set transition for smooth movement
+    card.style.transition = "transform 0.5s ease-out";
+
+    // Move the card using transform
+    card.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+
+    // Wait for animation to finish, then append to new parent
+    setTimeout(() => {
+        card.style.transition = ""; // Remove transition
+        card.style.transform = ""; // Reset transform
+        card.style.position = "static"; // Override absolute positioning
+        target.appendChild(card); 
+
+
+
+
+    }, 700); // Match transition duration otherwise it looks weird
+}
+
+function makeCardsPlayable(){
+    
+    let cardsOnHand = document.querySelectorAll(".onHand");
+
+
+    for (let i = 0; i<cardsOnHand.length; i++){
+        cardsOnHand[i].style.animationDelay = "0s";
+        cardsOnHand[i].addEventListener('click', function(){
+
+            selectCard(cardsOnHand[i])
+        })
+    }
+    
+}
+
+function selectCard(card){
+    document.querySelectorAll(".onHand").forEach(c => {
+        if (c !== card) {
+            c.classList.remove("clickedCard");
+            c.style.pointerEvents = "auto"; // Re-enables clicking on other cards
+        }
+    });
+
+    // Toggle the clicked card
+    if (!card.classList.contains("clickedCard")) {
+        card.classList.add("clickedCard");
+   
+    } else {
+        card.classList.remove("clickedCard");
+        card.style.pointerEvents = "auto"; // Re-enables clicking
+    }
+}
+
 startTheGameButton.addEventListener('click',function(){
     startTheGameButton.style.animation = 'none';
     void startTheGameButton.offsetWidth; // Reflow trigger
@@ -29,7 +90,8 @@ startTheGameButton.addEventListener('click',function(){
             deck.appendChild(createdCard);
             cards.push(createdCard);
         }
-
+        
+        
         setTimeout(() => {
             let delay = 0;
 
@@ -37,50 +99,33 @@ startTheGameButton.addEventListener('click',function(){
             for (let z = 15; z > 12; z--) {
                 setTimeout(() => {
                     animateCardMovement(cards[z], gridItems[z]);
+                    setTimeout(() => {
+                        cards[z].classList.add("onGrid");
+                    }, 500);
                 }, delay);
                 delay += 250; 
             }
         
             // Move 4 cards to cardHolders 
             let cardHolderCounter = 0;
-        for (let i = 12; i > 8; i--) {
-            setTimeout(() => {
-                animateCardMovement(cards[i], cardHolders[cardHolderCounter]);
-                cardHolderCounter++;
-            }, delay);
-            delay += 300;
-        }
-
-
-            function animateCardMovement(card, target) {
-                const cardRect = card.getBoundingClientRect();
-                const targetRect = target.getBoundingClientRect();
-            
-                const deltaX = targetRect.left + targetRect.width / 2 - (cardRect.left + cardRect.width / 2);
-                const deltaY = targetRect.top + targetRect.height / 2 - (cardRect.top + cardRect.height / 2);
-            
-            
-                // Set transition for smooth movement
-                card.style.transition = "transform 0.5s ease-out";
-            
-                // Move the card using transform
-                card.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-            
-                // Wait for animation to finish, then append to new parent
+            for (let i = 12; i > 8; i--) {
                 setTimeout(() => {
-                    card.style.transition = ""; // Remove transition
-                    card.style.transform = ""; // Reset transform
-                    card.style.position = "static"; // Override absolute positioning
-                    target.appendChild(card); 
-
-
-
-
-                }, 700); // Match transition duration otherwise it looks weird
-        }
+                    animateCardMovement(cards[i], cardHolders[cardHolderCounter]);
+                    cardHolderCounter++;
+                    setTimeout(() => {
+                        cards[i].classList.add("onHand");
+                    }, 500);
+                    
+                    
+                }, delay);
+                
+                delay += 300;
+            }
+            setTimeout(makeCardsPlayable, delay+500)
+            
     }   , 16*160);
-        console.log(deck);
-        
+   
+    
 })
 })
 

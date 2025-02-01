@@ -178,7 +178,18 @@ h1{
     justify-content: center;
     align-items: center;
 }
+/*CARDS THAT ARE ON YOUR HAND AND ON THE GRID*/
+.onHand{
 
+   cursor: pointer;
+}
+.onGrid{
+
+}
+.clickedCard{
+    animation: sway 0.5s linear infinite;
+    transform-origin: center;
+}
 
 /*ANIMATIONS*/
 @keyframes fadeIn {
@@ -222,5 +233,23 @@ h1{
     }
     100% {
         left: 0; /* Final position */
+    }
+}
+
+@keyframes sway {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-5deg);
+    }
+    50% {
+        transform: rotate(0deg);
+    }
+    75% {
+        transform: rotate(5deg);
+    }
+    100% {
+        transform: rotate(0deg);
     }
 }

@@ -6,6 +6,12 @@ const deck = document.querySelector(".deck");
 const gridItems = document.querySelectorAll(".gridItem");
 const cardHolders = document.querySelectorAll(".cardHolder");
 
+let cardCounter = 4; //start the game with 4 cards
+let deckCounter = 16;
+
+let firstHandOfGame = 1;
+
+let cardsInDeck = [];
 
 function animateCardMovement(card, target) {
     const cardRect = card.getBoundingClientRect();
@@ -44,17 +50,21 @@ function makeCardsPlayable(){
         }
     }
 
-    // Add event listener to grid items for placing the selected card
-    gridItems.forEach(gridItem => {
-        gridItem.addEventListener('click', function() {
-            if (document.querySelector('.clickedCard')) { // Ensure there's a selected card
-                let selectedCard = document.querySelector('.clickedCard');
-                placeCardOnGrid(selectedCard, gridItem); 
-                
-                selectedCard.classList.remove('clickedCard');
-            }
+
+    // Add event listener to grid items for placing the selected card if only first hand
+    if (firstHandOfGame){
+        gridItems.forEach(gridItem => {
+            gridItem.addEventListener('click', function() {
+                if (document.querySelector('.clickedCard')) { // Ensure there's a selected card
+                    let selectedCard = document.querySelector('.clickedCard');
+                    placeCardOnGrid(selectedCard, gridItem); 
+                    selectedCard.classList.remove('clickedCard');
+                }
+            });
         });
-    });
+        firstHandOfGame = 0;
+    }
+    
 }
 
 function selectCard(card){ // TODO: diselect when the click is on random part of the screen
@@ -68,7 +78,9 @@ function selectCard(card){ // TODO: diselect when the click is on random part of
     card.classList.toggle("clickedCard");
 }
 
-function placeCardOnGrid(card, target) { 
+function placeCardOnGrid(card, target) {
+
+
     if (!target.classList.contains("notEmptyGrid") && !target.classList.contains("onGrid")) // Prevent placing on full slots
     {
     const cardRect = card.getBoundingClientRect();
@@ -109,8 +121,69 @@ function placeCardOnGrid(card, target) {
         target.appendChild(newCard);
         newCard.classList.remove("clickedCard");
         target.classList.add("notEmptyGrid"); // Mark grid as full
-        
+        cardCounter--;
+
+        if ((cardCounter == 0) && !(deckCounter==0)){
+            let cardHolderCounterTwo = 0;
+            if (deckCounter >= 4){
+                
+                let delay = 0;
+
+                for(let i = deckCounter-1; i >= deckCounter-4 ; --i){
+
+                    setTimeout(() => {
+                        animateCardMovement(cardsInDeck[i], cardHolders[cardHolderCounterTwo]);
+                        cardHolderCounterTwo++;
+                        setTimeout(() => {
+                            
+                            cardsInDeck[i].classList.add("onHand");
+                            cardsInDeck.pop();
+                            
+                        }, 500);
+                        
+                        
+                    }, delay);
+                    
+                    delay += 300;
+                }
+                cardCounter=4;
+                setTimeout(() => {
+                    makeCardsPlayable();
+                }, delay+500);
+                deckCounter = deckCounter - 4;
+            }else{
+                let delay = 0;
+                
+                for(let i = deckCounter-1; i >= 0 ; --i){
+                    
+                    setTimeout(() => {
+                        animateCardMovement(cardsInDeck[i], cardHolders[cardHolderCounterTwo]);
+                        cardHolderCounterTwo++;
+                        setTimeout(() => {
+                            
+                            cardsInDeck[i].classList.add("onHand");
+                            cardsInDeck.pop();
+                        }, 500);
+                        
+                        
+                    }, delay);
+                    
+                    delay += 300;
+                }
+                cardCounter=0;
+                setTimeout(() => {
+                    makeCardsPlayable();
+                }, delay+500);
+                deckCounter =0;
+            }  
+
+        }else if(deckCounter==0){
+            console.log("finito")
+        }
     }, 500);
+
+   
+
 }
 }
 
@@ -125,7 +198,7 @@ startTheGameButton.addEventListener('click',function(){
         gridContainer.classList.toggle('hidden');
         tableContainer.classList.toggle('hidden');
 
-        let cards = []; // Store created cards
+        var cards = []; // Store created cards
 
         for(let i=0;i<16;i++){
             const createdCard = document.createElement('div');
@@ -137,31 +210,34 @@ startTheGameButton.addEventListener('click',function(){
 
             deck.appendChild(createdCard);
             cards.push(createdCard);
+            cardsInDeck.push(createdCard);
         }
         
         
         setTimeout(() => {
             let delay = 0;
-
-            // Move 3 cards to gridItems (TODO: MAKE IT RANDOM AMOUNT OF CARDS AND POSITIONS)
-            for (let z = 15; z > 12; z--) {
+            let putTillThisManyCards = 12 // (TODO: MAKE IT RANDOM AMOUNT OF CARDS AND POSITIONS)
+            // Move 3 cards to gridItems
+            for (let z = 15; z > putTillThisManyCards; z--) {
                 setTimeout(() => {
                     animateCardMovement(cards[z], gridItems[z]);
                     setTimeout(() => {
                         cards[z].classList.add("onGrid");
+                        cardsInDeck.pop();
                         gridItems[z].classList.add("notEmptyGrid");
                     }, 500);
                 }, delay);
                 delay += 250; 
             }
-        
+            deckCounter = deckCounter - (deckCounter - putTillThisManyCards - 1);
             // Move 4 cards to cardHolders 
             let cardHolderCounter = 0;
-            for (let i = 12; i > 8; i--) {
+            for (let i = putTillThisManyCards; i > 8; i--) {
                 setTimeout(() => {
                     animateCardMovement(cards[i], cardHolders[cardHolderCounter]);
                     cardHolderCounter++;
                     setTimeout(() => {
+                        cardsInDeck.pop();
                         cards[i].classList.add("onHand");
                     }, 500);
                     
@@ -169,8 +245,11 @@ startTheGameButton.addEventListener('click',function(){
                 }, delay);
                 
                 delay += 300;
+                deckCounter--;
             }
             setTimeout(makeCardsPlayable, delay+500)
+
+            
             
     }   , 16*140);
    

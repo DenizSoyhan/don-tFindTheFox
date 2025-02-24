@@ -92,7 +92,7 @@ function placeCardOnGrid(card, target) {
     // Clone the card to reset event listeners(cloning will remove event listeners so you can't click on them when they are on the grid)
     const newCard = card.cloneNode(true);
     newCard.classList.remove("onHand");
-    newCard.classList.add("onGrid");
+
     
     card.parentNode.removeChild(card);
 
@@ -111,9 +111,9 @@ function placeCardOnGrid(card, target) {
     setTimeout(() => {
         newCard.style.left = `${startX + deltaX}px`;
         newCard.style.top = `${startY + deltaY}px`;
-    }, 10);
+    }, 10);// After animation, append to the grid container
 
-    // After animation, append to the grid container
+    
     setTimeout(() => {
         card.classList.remove("clickedCard");
         newCard.style.position = "static"; // Reset for normal layout
@@ -121,6 +121,11 @@ function placeCardOnGrid(card, target) {
         target.appendChild(newCard);
         newCard.classList.remove("clickedCard");
         target.classList.add("notEmptyGrid"); // Mark grid as full
+
+        setTimeout(() => {
+            newCard.classList.add("onGrid"); // Flip the card after placing
+        }, 100); // delay is there so the flip animation doesn't start mid flight to the grid
+
         cardCounter--;
 
         if ((cardCounter == 0) && !(deckCounter==0)){
@@ -204,6 +209,27 @@ startTheGameButton.addEventListener('click',function(){
             const createdCard = document.createElement('div');
             createdCard.classList.add("card");
 
+
+            const front = document.createElement("div");
+            front.innerHTML = `
+            <span class="material-symbols-outlined large-icon">
+                group_work
+            </span>
+            `;
+            front.classList.add("front");
+            
+        
+            const back = document.createElement("div");
+            back.classList.add("back");
+        
+            // TODO: Assign random letters to the back (F, O, X)
+            const letters = ["F", "O", "X"];
+            back.textContent = letters[i % 3]; 
+        
+            // Append front and back to the card
+            createdCard.appendChild(front);
+            createdCard.appendChild(back);
+
             createdCard.style.top = `${i * 5}px`;
 
             createdCard.style.animationDelay = `${i * 0.1}s`;
@@ -222,7 +248,11 @@ startTheGameButton.addEventListener('click',function(){
                 setTimeout(() => {
                     animateCardMovement(cards[z], gridItems[z]);
                     setTimeout(() => {
-                        cards[z].classList.add("onGrid");
+                        
+                        setTimeout(() => {
+                            cards[z].classList.add("onGrid"); // Flip the card after placing
+                        }, 400);
+                        
                         cardsInDeck.pop();
                         gridItems[z].classList.add("notEmptyGrid");
                     }, 500);

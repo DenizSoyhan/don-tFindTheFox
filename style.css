@@ -28,7 +28,10 @@ h1{
     text-align: center;
 
 }
-
+/*Icon for front side of the card*/
+.large-icon{
+    font-size: 40px !important; 
+}
 #fox{
     color: #EB5E28;
     font-size: 3rem;
@@ -142,27 +145,85 @@ h1{
 
 
 }
-.card{
-
+/* Card container - ensures perspective for 3D flip */
+.card {
     width: 90px;
     height: 110px;
-    border: 1px solid #252422;
+
     border-radius: 20px;
     background-color: #CCC5B9;
 
-    box-shadow: 0 6px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 3px #CCC5B9;
 
     position: absolute;
     left: -650px;
-
     animation: slideIn 0.7s ease forwards;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px; /* Set perspective on the card */
+    transform-style: preserve-3d; /* Enable 3D effect directly on the card */
+    transition: transform 0.5s ease-in-out; 
+
+    overflow: hidden;
+    box-sizing: border-box;
 }
+.card .front, .card .back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden; /* Prevent the back from showing when flipped */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+ 
+
+    border: 1px solid #252422;
+    border-radius: 20px;
+    box-sizing: border-box;
+
+
+}
+
+/* Front side of the card (visible first) */
+.card .front {
+    background: #8D80AD;
+    z-index: 2; /* Ensure front is above back */
+    color: #252422; /* Make sure the text on the front is visible */
+
+
+}
+
+/* Back side of the card (initially hidden) */
+.card .back {
+    background: #8D80AD;
+    transform: rotateY(180deg); /* Initially hide the back by rotating it */
+
+    color: #252422;
+    font-size: 55px;
+    font-weight: bold; 
+
+    border: 1px solid #252422;
+    border-radius: 20px;
+    box-sizing: border-box;
+}
+
+
+/* flip animation when the card is placed on the grid */
+.onGrid .front {
+  animation: flip 0.2s ease-in forwards;
+}
+
+.onGrid .back {
+  animation: flip 0.2s 0.2s ease-out forwards reverse;
+}
+
+
 /*table*/
 .table{
 
-
     display: flex;
-
     justify-content: space-evenly;
 }
 
@@ -259,3 +320,9 @@ h1{
         transform: rotate(0deg);
     }
 }
+
+/* Keyframes for flipping animation */
+@keyframes flip {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(90deg); }
+  }

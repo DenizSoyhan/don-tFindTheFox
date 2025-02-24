@@ -3,6 +3,9 @@ const gridContainer = document.querySelector(".gridContainer");
 const tableContainer = document.querySelector(".tableContainer");
 const deck = document.querySelector(".deck");
 
+const datePicker = document.getElementById("gameDate");
+const dateInfo = document.getElementById("dateInfo")
+
 const gridItems = document.querySelectorAll(".gridItem");
 const cardHolders = document.querySelectorAll(".cardHolder");
 
@@ -12,8 +15,21 @@ let deckCounter = 16;
 let firstHandOfGame = 1;
 
 let cardsInDeck = [];
+/*date picking*/
+
+document.addEventListener("DOMContentLoaded", function () {
+ 
+    // Set max date to today
+    const today = new Date().toISOString().split("T")[0];
+    datePicker.setAttribute("max", today);
+
+    if (!datePicker.value) {
+        datePicker.value = today;
+    }
+});
 
 
+/*game functionality*/
 
 function animateCardMovement(card, target) {
     const cardRect = card.getBoundingClientRect();
@@ -199,8 +215,27 @@ startTheGameButton.addEventListener('click',function(){
     startTheGameButton.style.animation = 'none';
     void startTheGameButton.offsetWidth; // Reflow trigger
     
+    const selectedDate = datePicker.value;
+    console.log(selectedDate);
+    let betterFormattedDate = selectedDate.split("-");
+    datePicker.parentElement.style.animation = "fadeOut 0.5s forwards ease-in "
+
+    datePicker.parentElement.addEventListener("animationend",(event)=>{
+        datePicker.parentElement.classList.add("hidden");
+        dateInfo.classList.remove("hidden");
+
+        dateInfo.innerHTML = `You are playing the game of <br><span style="color: #EB5E28; font-size: 36px;">${betterFormattedDate[2]}-${betterFormattedDate[1]}-${betterFormattedDate[0]}</span>`;
+
+        dateInfo.style.animation = "fadeIn 0.5s forwards ease-in"
+
+
+    });
+    
+    
+
     var unshuffledDeck = ["F","F","F","F","F","O","O","O","O","O","O","X","X","X","X","X",];
-    var currentDate = getDailySeed();
+    var currentDate = getDailySeed(selectedDate);
+    console.log(currentDate);
 
     startTheGameButton.style.animation = 'fadeOut 0.5s forwards';
     startTheGameButton.addEventListener('animationend', (event) => {
@@ -249,8 +284,8 @@ startTheGameButton.addEventListener('click',function(){
         setTimeout(() => {
             let delay = 0;
             
-            let howManyToReveal = getCardsToReveal()
-            let revealPositions = getRevealPositions(howManyToReveal);
+            let howManyToReveal = getCardsToReveal(selectedDate)
+            let revealPositions = getRevealPositions(howManyToReveal,selectedDate);
 
             let putTillThisManyCards = 15-howManyToReveal; 
 
@@ -309,8 +344,8 @@ function seededRandom(seed) {
     return x - Math.floor(x);
 }
 
-function getDailySeed() {
-    let date = new Date();
+function getDailySeed(selectedDate) {
+    let date = new Date(selectedDate);
     return parseInt(`${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}`); //+1 month because JS months are 0 based for some reason
 }
 
@@ -333,14 +368,14 @@ function shuffleDeck(array, seed) {
 }
 
 // Select how many cards to reveal (1 to 3) using the seed
-function getCardsToReveal() {
-    let seed = getDailySeed();
+function getCardsToReveal(selectedDate) {
+    let seed = getDailySeed(selectedDate);
     return Math.floor(seededRandom(seed) * 3) + 1; // 1 to 3
 }
 
 // Select positions to reveal the cards (on the 4x4 grid)
-function getRevealPositions(count) {
-    let seed = getDailySeed();
+function getRevealPositions(count,selectedDate) {
+    let seed = getDailySeed(selectedDate);
     let positions = [];
 
     for(let i = 0;i<16;i++){

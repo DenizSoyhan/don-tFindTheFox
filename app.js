@@ -13,6 +13,8 @@ let firstHandOfGame = 1;
 
 let cardsInDeck = [];
 
+
+
 function animateCardMovement(card, target) {
     const cardRect = card.getBoundingClientRect();
     const targetRect = target.getBoundingClientRect();
@@ -197,6 +199,9 @@ startTheGameButton.addEventListener('click',function(){
     startTheGameButton.style.animation = 'none';
     void startTheGameButton.offsetWidth; // Reflow trigger
     
+    var unshuffledDeck = ["F","F","F","F","F","O","O","O","O","O","O","X","X","X","X","X",];
+    var currentDate = getDailySeed();
+
     startTheGameButton.style.animation = 'fadeOut 0.5s forwards';
     startTheGameButton.addEventListener('animationend', (event) => {
         startTheGameButton.classList.toggle('hidden');
@@ -204,6 +209,9 @@ startTheGameButton.addEventListener('click',function(){
         tableContainer.classList.toggle('hidden');
 
         var cards = []; // Store created cards
+        let shuffledDeck = shuffleDeck(unshuffledDeck,currentDate);
+
+
 
         for(let i=0;i<16;i++){
             const createdCard = document.createElement('div');
@@ -221,10 +229,8 @@ startTheGameButton.addEventListener('click',function(){
         
             const back = document.createElement("div");
             back.classList.add("back");
-        
-            // TODO: Assign random letters to the back (F, O, X)
-            const letters = ["F", "O", "X"];
-            back.textContent = letters[i % 3]; 
+
+            back.textContent = shuffledDeck[i];
         
             // Append front and back to the card
             createdCard.appendChild(front);
@@ -242,11 +248,17 @@ startTheGameButton.addEventListener('click',function(){
         
         setTimeout(() => {
             let delay = 0;
-            let putTillThisManyCards = 12 // (TODO: MAKE IT RANDOM AMOUNT OF CARDS AND POSITIONS)
-            // Move 3 cards to gridItems
+            
+            let howManyToReveal = getCardsToReveal()
+            let revealPositions = getRevealPositions(howManyToReveal);
+
+            let putTillThisManyCards = 15-howManyToReveal; 
+
+            
+            // Move random amount of cards to gridItems
             for (let z = 15; z > putTillThisManyCards; z--) {
                 setTimeout(() => {
-                    animateCardMovement(cards[z], gridItems[z]);
+                    animateCardMovement(cards[z], gridItems[revealPositions[Math.abs(z-15)]]);
                     setTimeout(() => {
                         
                         setTimeout(() => {
@@ -254,15 +266,17 @@ startTheGameButton.addEventListener('click',function(){
                         }, 400);
                         
                         cardsInDeck.pop();
-                        gridItems[z].classList.add("notEmptyGrid");
+                        gridItems[revealPositions[Math.abs(z-15)]].classList.add("notEmptyGrid");
+
                     }, 500);
+                    
                 }, delay);
                 delay += 250; 
             }
             deckCounter = deckCounter - (deckCounter - putTillThisManyCards - 1);
             // Move 4 cards to cardHolders 
             let cardHolderCounter = 0;
-            for (let i = putTillThisManyCards; i > 8; i--) {
+            for (let i = putTillThisManyCards; i > putTillThisManyCards-4; i--) {
                 setTimeout(() => {
                     animateCardMovement(cards[i], cardHolders[cardHolderCounter]);
                     cardHolderCounter++;
@@ -288,5 +302,54 @@ startTheGameButton.addEventListener('click',function(){
 
 })
 
+/* PSEUDO RANDOMIZATION FUNCTIONS*/
+
+function seededRandom(seed) {
+    let x = Math.sin(seed) * 10000;
+    return x - Math.floor(x);
+}
+
+function getDailySeed() {
+    let date = new Date();
+    return parseInt(`${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}`); //+1 month because JS months are 0 based for some reason
+}
+
+function shuffleDeck(array, seed) {
+    let shuffled = array.slice(); // Copy the array so we don't modify the original
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        // Generate a new pseudo-random seed value 16 times so it is randomized. The numbers are random prime numbers to make the results seem randomized.
+        seed = (seed * 9301 + 49297) % 233280; 
+
+        // Scale the seed value to an index between 0 and i
+        let j = Math.floor((seed / 233280) * (i + 1));
+
+        // Swap elements at index i and j
+        let placeHolder = shuffled[i];
+        shuffled[i] = shuffled[j];
+        shuffled[j] = placeHolder;
+
+    }
+    return shuffled;
+}
+
+// Select how many cards to reveal (1 to 3) using the seed
+function getCardsToReveal() {
+    let seed = getDailySeed();
+    return Math.floor(seededRandom(seed) * 3) + 1; // 1 to 3
+}
+
+// Select positions to reveal the cards (on the 4x4 grid)
+function getRevealPositions(count) {
+    let seed = getDailySeed();
+    let positions = [];
+
+    for(let i = 0;i<16;i++){
+        positions.push(i);
+    }
+
+    let shuffledPositions = shuffleDeck(positions, seed);
+    //first to count is the revealing positions
+    return shuffledPositions.slice(0, count);
+}
 
 

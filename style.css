@@ -211,7 +211,9 @@ h1{
 
 
 }
-
+.onGrid.card{
+    box-shadow: none;
+}
 /* Front side of the card (visible first) */
 .card .front {
     background: #8D80AD;
@@ -284,6 +286,11 @@ h1{
 .inDeck{
     
 }
+/*STOP INTERACTIONS AFTER GAME IS OVER BY DISABLING POINTER EVENTS*/
+.gameOver {
+    pointer-events: none; 
+    cursor: not-allowed; 
+}
 /*ANIMATIONS*/
 @keyframes fadeIn {
     from {
@@ -352,3 +359,14 @@ h1{
     0% { transform: rotateY(0deg); }
     100% { transform: rotateY(90deg); }
   }
+
+
+.fadeToOrange {
+    transition: background-color 1s ease 0.4s; 
+    background-color: #EB5E28; 
+}
+
+.fadeToGreen {
+    transition: background-color 1s ease 0.4s; 
+    background-color: #a5f383;
+}

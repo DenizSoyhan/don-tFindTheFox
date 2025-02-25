@@ -9,13 +9,16 @@ const dateInfo = document.getElementById("dateInfo")
 const gridItems = document.querySelectorAll(".gridItem");
 const cardHolders = document.querySelectorAll(".cardHolder");
 
+
 let cardCounter = 4; //start the game with 4 cards
 let deckCounter = 16;
+let cardsPlayed = 0;
 
 let firstHandOfGame = 1;
 
 let cardsInDeck = [];
-/*date picking*/
+
+/*DATE PICKING*/
 
 document.addEventListener("DOMContentLoaded", function () {
  
@@ -29,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-/*game functionality*/
+/*GAME FUNCTIONALITY*/
 
 function animateCardMovement(card, target) {
     const cardRect = card.getBoundingClientRect();
@@ -142,6 +145,8 @@ function placeCardOnGrid(card, target) {
 
         setTimeout(() => {
             newCard.classList.add("onGrid"); // Flip the card after placing
+            cardsPlayed++;
+            checkGameState(gridItems);
         }, 100); // delay is there so the flip animation doesn't start mid flight to the grid
 
         cardCounter--;
@@ -200,8 +205,6 @@ function placeCardOnGrid(card, target) {
                 deckCounter =0;
             }  
 
-        }else if(deckCounter==0){
-            console.log("finito")
         }
     }, 500);
 
@@ -215,8 +218,8 @@ startTheGameButton.addEventListener('click',function(){
     startTheGameButton.style.animation = 'none';
     void startTheGameButton.offsetWidth; // Reflow trigger
     
-    const selectedDate = datePicker.value;
-    console.log(selectedDate);
+    let selectedDate = datePicker.value;
+
     let betterFormattedDate = selectedDate.split("-");
     datePicker.parentElement.style.animation = "fadeOut 0.5s forwards ease-in "
 
@@ -224,7 +227,7 @@ startTheGameButton.addEventListener('click',function(){
         datePicker.parentElement.classList.add("hidden");
         dateInfo.classList.remove("hidden");
 
-        dateInfo.innerHTML = `You are playing the game of <br><span style="color: #EB5E28; font-size: 36px;">${betterFormattedDate[2]}-${betterFormattedDate[1]}-${betterFormattedDate[0]}</span>`;
+        dateInfo.innerHTML = `You are playing the game of <br><span style="color: #EB5E28; font-size: 36px;">${betterFormattedDate[2]}-${betterFormattedDate[1]}-${betterFormattedDate[0]}</span><br>Have fun and good luck!`;
 
         dateInfo.style.animation = "fadeIn 0.5s forwards ease-in"
 
@@ -235,7 +238,7 @@ startTheGameButton.addEventListener('click',function(){
 
     var unshuffledDeck = ["F","F","F","F","F","O","O","O","O","O","O","X","X","X","X","X",];
     var currentDate = getDailySeed(selectedDate);
-    console.log(currentDate);
+
 
     startTheGameButton.style.animation = 'fadeOut 0.5s forwards';
     startTheGameButton.addEventListener('animationend', (event) => {
@@ -245,7 +248,7 @@ startTheGameButton.addEventListener('click',function(){
 
         var cards = []; // Store created cards
         let shuffledDeck = shuffleDeck(unshuffledDeck,currentDate);
-
+        console.log(shuffledDeck);
 
 
         for(let i=0;i<16;i++){
@@ -298,11 +301,12 @@ startTheGameButton.addEventListener('click',function(){
                         
                         setTimeout(() => {
                             cards[z].classList.add("onGrid"); // Flip the card after placing
+                            cardsPlayed++;
                         }, 400);
                         
                         cardsInDeck.pop();
                         gridItems[revealPositions[Math.abs(z-15)]].classList.add("notEmptyGrid");
-
+                        
                     }, 500);
                     
                 }, delay);
@@ -387,4 +391,152 @@ function getRevealPositions(count,selectedDate) {
     return shuffledPositions.slice(0, count);
 }
 
+/*GAME CONDITION CHECKING (WON/LOST)*/
+function checkGameState(gridItems) {
+    let grid = [[".",".",".","."],
+                [".",".",".","."],
+                [".",".",".","."],
+                [".",".",".","."]] //our virtual grid
+    
+    // Fill grid with letters from placed cards 
+    gridItems.forEach((gridItem, index) => {
+        let row = Math.floor(index / 4);
+        let col = index % 4;
+        let card = gridItem.querySelector(".onGrid"); // Check if a card is placed, will return null if empty
 
+        if (card) {
+            let backside = card.querySelector(".back"); //card is the container that holds ".back" which is where the letter is located
+            grid[row][col] = backside.textContent; // Store letter in grid
+        } 
+    });
+
+    // Check for "FOX" in all directions
+    if (checkForFox(grid)) {//IF LOST
+        let delay = 0;
+
+        console.log("Game Over! You found the FOX.");
+
+        let sameSelectedDate = datePicker.value; 
+        let sameBetterFormattedDate = sameSelectedDate.split("-");
+
+        let cardsAtTheEnd = document.querySelectorAll(".card");
+
+        cardsAtTheEnd.forEach(card =>{
+            card.classList.add("gameOver");
+        })
+
+        setTimeout(() => {
+            dateInfo.innerHTML = `You <span style="color: red;">LOST</span> the game of <br>
+            <span style="color: #EB5E28; font-size: 36px;">${sameBetterFormattedDate[2]}-${sameBetterFormattedDate[1]}-${sameBetterFormattedDate[0]}</span><br>
+            Refresh the page to play another date!`;
+
+        }, 200);
+        gridItems.forEach((gridItem, index) => {
+            setTimeout(() => {
+                gridItem.classList.add("fadeToOrange");
+            }, delay);  
+            delay += 70;  // increasing delay
+        });
+    
+        
+    }else if(cardsPlayed==16){// IF WON
+        
+        let delay = 0;
+
+        console.log("YOU WON");
+
+        let sameSelectedDate = datePicker.value; 
+        let sameBetterFormattedDate = sameSelectedDate.split("-");
+
+        setTimeout(() => {
+            dateInfo.innerHTML = `You <span style="color: green;">WON</span> the game of <br>
+            <span style="color: #EB5E28; font-size: 36px;">${sameBetterFormattedDate[2]}-${sameBetterFormattedDate[1]}-${sameBetterFormattedDate[0]}</span><br>
+            Send some screenshots to your friends.`;
+
+        }, 400);
+
+        gridItems.forEach((gridItem, index) => {
+
+            setTimeout(() => {
+                gridItem.classList.add("fadeToGreen");
+            }, delay);  
+            delay += 80;  // increasing the delay
+        });
+
+    }
+}
+
+function checkForFox(grid) {
+    let targetWord = "FOX";
+
+    // Check rows and columns
+    for (let i = 0; i < 4; i++) {
+        let row = grid[i].join(""); // row as a string
+
+        let col = "";   // col as a string
+            for (let row = 0; row < grid.length; row++) {
+                col += grid[row][i];
+            }   
+        
+        if (row.includes(targetWord) || row.split("").reverse().join("").includes(targetWord) ||
+            col.includes(targetWord) || col.split("").reverse().join("").includes(targetWord)) {
+            return true;
+        }
+    }
+
+    let diagonals = getDiagonals(grid);
+    for (let diag of diagonals) {
+        if (diag.includes(targetWord)){
+            return true;
+        } 
+    }
+
+    return false;
+}
+
+// Function to extract diagonal words
+function getDiagonals(grid) {
+    let diagonals = [];
+
+    //Top-left to bottom-right
+    for (let startRow = 0; startRow < 4; startRow++) {
+        let diag = ""; 
+        let revDiag = "";
+        for (let i = 0; i < 4 - startRow; i++) {
+            diag = diag + grid[startRow + i][i];
+            revDiag = grid[startRow + i][i] + revDiag;
+        }
+        diagonals.push(diag, revDiag);
+    }
+    for (let startCol = 1; startCol < 4; startCol++) {
+        let diag = "";
+        let revDiag = "";
+        for (let i = 0; i < 4 - startCol; i++) {
+            diag = diag + grid[i][startCol + i];
+            revDiag = grid[i][startCol + i] + revDiag;
+        }
+        diagonals.push(diag, revDiag);
+    }
+
+    //Top-right to bottom-left
+    for (let startRow = 0; startRow < 4; startRow++) {
+        let diag = "";
+        let revDiag = "";
+        for (let i = 0; i < 4 - startRow; i++) {
+            diag = diag + grid[startRow + i][3 - i];
+            revDiag = grid[startRow + i][3 - i] + revDiag;
+        }
+        diagonals.push(diag, revDiag);
+    }
+    for (let startCol = 2; startCol >= 0; startCol--) {
+        let diag = ""
+        let revDiag = "";
+        for (let i = 0; i <= startCol; i++) {
+            diag = diag + grid[i][startCol - i];
+            revDiag = grid[i][startCol - i] + revDiag;
+        }
+        diagonals.push(diag, revDiag);
+    }
+
+    return diagonals;
+}

@@ -9,6 +9,8 @@ const dateInfo = document.getElementById("dateInfo")
 const gridItems = document.querySelectorAll(".gridItem");
 const cardHolders = document.querySelectorAll(".cardHolder");
 
+const revealPUButton = document.getElementById("revealPowerUpButton");
+const percentPUButton = document.getElementById("percentPowerUpButton");
 
 let cardCounter = 4; //start the game with 4 cards
 let deckCounter = 16;
@@ -78,6 +80,9 @@ function makeCardsPlayable(){
             gridItem.addEventListener('click', function() {
                 if (document.querySelector('.clickedCard')) { // Ensure there's a selected card
                     let selectedCard = document.querySelector('.clickedCard');
+                    if(document.querySelector('.clickedCard').parentElement.querySelector(".revealInformationContainer")){
+                        removeRevealInformation();
+                    }
                     placeCardOnGrid(selectedCard, gridItem); 
                     selectedCard.classList.remove('clickedCard');
                 }
@@ -213,6 +218,41 @@ function placeCardOnGrid(card, target) {
 }
 }
 
+/*Power Ups*/
+
+function revealACard(){
+    let cardsOnHand = document.querySelectorAll(".onHand");
+    
+    if(cardsOnHand){
+        let whichCard = Math.floor(Math.random() * (cardsOnHand.length));
+
+        revealPUButton.classList.add("powerUpUsed");
+        revealPUButton.classList.add("gameOver");
+
+        let revealInformation = document.createElement("div");
+        revealInformation.classList.add("revealInformationContainer");
+        revealInformation.textContent=`This card is ${cardsOnHand[whichCard].querySelector(".back").textContent}`;
+
+        cardsOnHand[whichCard].parentElement.appendChild(revealInformation);
+
+        revealInformation.classList.add("active");
+    }
+
+}
+
+function removeRevealInformation(){
+    let revealInformation = document.querySelector(".revealInformationContainer");
+    revealInformation.style.animation = "fadeOut 0.3s ease-in forwards";
+    setTimeout(() => {
+        revealInformation.remove();
+    }, 1000);
+    
+}
+
+revealPUButton.addEventListener('click', function(){
+    revealACard();
+});
+
 
 startTheGameButton.addEventListener('click',function(){
     startTheGameButton.style.animation = 'none';
@@ -330,9 +370,8 @@ startTheGameButton.addEventListener('click',function(){
                 delay += 300;
                 deckCounter--;
             }
-            setTimeout(makeCardsPlayable, delay+500)
+            setTimeout(makeCardsPlayable, delay+500);
 
-            
             
     }   , 16*140);
    

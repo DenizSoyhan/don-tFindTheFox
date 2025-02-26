@@ -171,6 +171,93 @@ h1{
 
 
 }
+/*Power Up styling*/
+.powerUpContainer{
+    position: absolute;
+
+    width: 100%;
+
+    top: 25%;
+    left: 102%;
+}
+.containerPU{
+    margin: 1em;
+    padding: 0.25em;
+
+    width: 20%;
+    height: fit-content;
+    border: 1px solid #252422;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    font-weight: bold;
+
+    background-color: #EB5E28;
+
+    transition: background-color 0.2s ease-in, color 0.2s ease-in;
+    cursor: pointer;
+}
+.containerPU:hover{
+    background-color: #252422;
+    color: #e47f56;
+}
+.containerPU i{
+    font-size: 3rem;
+    margin-bottom: 0.15em;
+}
+
+.revealInformationContainer{
+    position: absolute;
+
+    background-color: black;
+    color: white;
+    padding: 5px 8px;
+
+    white-space: nowrap;
+
+    border-radius: 7px;
+
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+
+    z-index: 1000;
+}
+
+.powerUpUsed{
+    background-color: #252422;
+    color: #e47f56;
+}
+
+.revealInformationContainer::before{ /*POINTY PART*/
+    content: "";
+    position: absolute;
+
+    left: 50%;
+    top: 100%;
+
+    transform: translateX(-50%);
+
+    border: 15px solid;
+
+    border-color: #000 #0000 #0000 #0000;
+}
+
+.active{
+    bottom: 16%;
+    visibility: visible;
+    opacity: 1;
+
+    animation: fadeInFromDownSmaller 0.4s ease-in;
+}
+
+
 /* Card container - ensures perspective for 3D flip */
 .card {
     width: 90px;
@@ -326,6 +413,18 @@ h1{
 
     }
 }
+@keyframes fadeInFromDownSmaller {
+    from {
+        transform: translateY(10px);
+        opacity: 0;
+
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+
+    }
+}
 
 @keyframes slideIn {
     0% {
@@ -363,7 +462,7 @@ h1{
 
 .fadeToOrange {
     transition: background-color 1s ease 0.4s; 
-    background-color: #EB5E28; 
+    background-color: #d96b40; 
 }
 
 .fadeToGreen {

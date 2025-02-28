@@ -1,6 +1,7 @@
 const startTheGameButton = document.querySelector(".startTheGameButton");
 const gridContainer = document.querySelector(".gridContainer");
 const tableContainer = document.querySelector(".tableContainer");
+const table = document.querySelector(".table");
 const deck = document.querySelector(".deck");
 
 const datePicker = document.getElementById("gameDate");
@@ -157,6 +158,11 @@ function placeCardOnGrid(card, target) {
         cardCounter--;
 
         if ((cardCounter == 0) && !(deckCounter==0)){
+            if(document.querySelector(".percentageContainer")){
+                removePercentInformation();
+            }
+                
+            
             let cardHolderCounterTwo = 0;
             if (deckCounter >= 4){
                 
@@ -185,6 +191,9 @@ function placeCardOnGrid(card, target) {
                 }, delay+500);
                 deckCounter = deckCounter - 4;
             }else{
+                if(document.querySelector(".percentageContainer")){
+                    removePercentInformation();
+                }
                 let delay = 0;
                 
                 for(let i = deckCounter-1; i >= 0 ; --i){
@@ -233,7 +242,11 @@ function revealACard(){
         revealInformation.classList.add("revealInformationContainer");
         revealInformation.textContent=`This card is ${cardsOnHand[whichCard].querySelector(".back").textContent}`;
 
-        cardsOnHand[whichCard].parentElement.appendChild(revealInformation);
+        let outerRevealContainer = document.createElement("div");
+        outerRevealContainer.classList.add("outerRevealContainer");
+        outerRevealContainer.appendChild(revealInformation);
+
+        cardsOnHand[whichCard].parentElement.appendChild(outerRevealContainer);
 
         revealInformation.classList.add("active");
     }
@@ -241,8 +254,8 @@ function revealACard(){
 }
 
 function removeRevealInformation(){
-    let revealInformation = document.querySelector(".revealInformationContainer");
-    revealInformation.style.animation = "fadeOut 0.3s ease-in forwards";
+    let revealInformation = document.querySelector(".outerRevealContainer");
+    revealInformation.style.animation = "fadeOutToUp 0.3s ease-in forwards";
     setTimeout(() => {
         revealInformation.remove();
     }, 1000);
@@ -252,6 +265,83 @@ function removeRevealInformation(){
 revealPUButton.addEventListener('click', function(){
     revealACard();
 });
+
+/*Second Power Up */
+
+function showPercents(){
+    let anotherCardsOnHand = document.querySelectorAll(".onHand");
+    if(anotherCardsOnHand){
+        //let whichCard = Math.floor(Math.random() * (cardsOnHand.length));
+
+        let howManyF = 0;
+        let howManyO = 0;
+        let howManyX = 0;
+
+        //Count how many letters
+        for(let i = 0; i<anotherCardsOnHand.length;i++){
+            let currentLetter = anotherCardsOnHand[i].querySelector(".back").textContent;
+            if (currentLetter == "F"){
+                howManyF++;
+            }else if(currentLetter == "O"){
+                howManyO++
+            }else if (currentLetter == "X"){
+                howManyX++
+            }
+        }
+
+        percentPUButton.classList.add("powerUpUsed");
+        percentPUButton.classList.add("gameOver");
+
+
+        let percentageContainer = document.createElement("div");
+        percentageContainer.classList.add("percentageContainer");
+
+        let percentageInformation = document.createElement("div");
+        percentageInformation.classList.add("percentageInformation");
+
+        let text = document.createElement("div");
+        text.textContent="Your hand consists of:";
+
+        let theList = document.createElement("ul");
+
+        let first = document.createElement("li");
+        let second = document.createElement("li");
+        let third = document.createElement("li");
+
+        first.textContent = `${Math.round((howManyF / 4) * 100)}% F's`;
+        second.textContent = `${Math.round((howManyO / 4) * 100)}% O's`;
+        third.textContent = `${Math.round((howManyX / 4) * 100)}% X's`;
+
+        theList.appendChild(first);
+        theList.appendChild(second);
+        theList.appendChild(third);
+
+        percentageInformation.appendChild(text);
+        percentageInformation.appendChild(theList);
+
+        percentageContainer.appendChild(percentageInformation);
+
+        table.appendChild(percentageContainer);
+
+        percentageInformation.classList.add("active")
+
+    }
+
+}
+
+function removePercentInformation(){
+    let percentInformation = document.querySelector(".percentageInformation");
+    let percentInformationContainer = document.querySelector(".percentageContainer");
+    percentInformationContainer.style.animation = "fadeOutToUp 0.5s ease-in forwards";
+    setTimeout(() => {
+        percentInformationContainer.remove();
+    }, 1000);
+    
+}
+
+percentPUButton.addEventListener('click',function(){
+    showPercents();
+})
 
 
 startTheGameButton.addEventListener('click',function(){
@@ -288,8 +378,6 @@ startTheGameButton.addEventListener('click',function(){
 
         var cards = []; // Store created cards
         let shuffledDeck = shuffleDeck(unshuffledDeck,currentDate);
-        console.log(shuffledDeck);
-
 
         for(let i=0;i<16;i++){
             const createdCard = document.createElement('div');
@@ -451,6 +539,14 @@ function checkGameState(gridItems) {
 
     // Check for "FOX" in all directions
     if (checkForFox(grid)) {//IF LOST
+
+        revealPUButton.classList.add("gameOver");
+        percentPUButton.classList.add("gameOver");
+
+        if(document.querySelector(".percentageContainer")){
+            removePercentInformation();
+        }
+        
         let delay = 0;
 
         console.log("Game Over! You found the FOX.");
@@ -478,8 +574,15 @@ function checkGameState(gridItems) {
         });
     
         
-    }else if(cardsPlayed==16){// IF WON
-        
+    }else if(cardsPlayed==16 && !checkForFox(grid)){// IF WON
+
+        revealPUButton.classList.add("gameOver");
+        percentPUButton.classList.add("gameOver");
+
+        if(document.querySelector(".percentageContainer")){
+            removePercentInformation();
+        }
+
         let delay = 0;
 
         console.log("YOU WON");

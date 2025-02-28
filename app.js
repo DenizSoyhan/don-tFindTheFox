@@ -592,7 +592,7 @@ function checkGameState(gridItems) {
 
         setTimeout(() => {
             dateInfo.innerHTML = `You <span style="color: green;">WON</span> the game of <br>
-            <span style="color: #EB5E28; font-size: 36px;">${sameBetterFormattedDate[2]}-${sameBetterFormattedDate[1]}-${sameBetterFormattedDate[0]}</span><br>
+            <span style="color: #6bcf40; font-size: 36px;">${sameBetterFormattedDate[2]}-${sameBetterFormattedDate[1]}-${sameBetterFormattedDate[0]}</span><br>
             Send some screenshots to your friends.`;
 
         }, 400);

@@ -6,9 +6,9 @@
 body{
     font-family: "Roboto", serif;
 
-    color: #252422;
+    color: #CCC5B9;
 
-    background-color: #FFFCF2;
+    background-color: #252422;
 
     position: relative;
 }
@@ -72,11 +72,11 @@ h1{
     margin: 1em auto;
     padding: 0.5em 0;
 
-    background-color: #CCC5B9;
-    border: 2px solid #CCC5B9;
+    background-color: #EB5E28;
+    border: 2px solid #EB5E28;
     border-radius: 20px;
 
-    color: #EB5E28;
+    color: #CCC5B9;
     font-size: 1.5rem;
     text-align: center;
 
@@ -86,9 +86,9 @@ h1{
     animation: fadeInFromDown 1s forwards;
 }
 .startTheGameButton:hover{
-    background-color: #8D80AD;
-    border-color: #8D80AD;
-    color: #FFFCF2;
+    background-color: #CCC5B9;
+    border-color: #CCC5B9;
+    color: #EB5E28;
 
 
 }
@@ -186,7 +186,7 @@ h1{
 
     width: 20%;
     height: fit-content;
-    border: 1px solid #252422;
+
     border-radius: 10px;
 
     display: flex;
@@ -204,7 +204,7 @@ h1{
     cursor: pointer;
 }
 .containerPU:hover{
-    background-color: #252422;
+    background-color: #CCC5B9;
     color: #e47f56;
 }
 .containerPU i{
@@ -228,7 +228,7 @@ h1{
     position: absolute;
 
     background-color: black;
-    color: white;
+    color: #CCC5B9;
     padding: 5px 8px;
 
     white-space: nowrap;
@@ -248,7 +248,7 @@ h1{
 }
 
 .powerUpUsed{
-    background-color: #252422;
+    background-color: #CCC5B9;
     color: #e47f56;
 }
 
@@ -283,7 +283,6 @@ h1{
     border-radius: 20px;
     background-color: #CCC5B9;
 
-    box-shadow: 0 6px 3px #CCC5B9;
 
     position: absolute;
     left: -650px;
@@ -320,7 +319,7 @@ h1{
 }
 /* Front side of the card (visible first) */
 .card .front {
-    background: #8D80AD;
+    background: #1481BA;
     z-index: 2; /* Ensure front is above back */
     color: #252422; /* Make sure the text on the front is visible */
 
@@ -329,7 +328,7 @@ h1{
 
 /* Back side of the card (initially hidden) */
 .card .back {
-    background: #8D80AD;
+    background: #1481BA;
     transform: rotateY(180deg); /* Initially hide the back by rotating it */
 
     color: #252422;
@@ -567,5 +566,5 @@ h1{
 
 .fadeToGreen {
     transition: background-color 1s ease 0.4s; 
-    background-color: #a5f383;
+    background-color: #6bcf40;
 }

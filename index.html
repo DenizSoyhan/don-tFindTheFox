@@ -20,6 +20,196 @@
         <h1>Don't Find The <br><span id="fox">Fox</span></h1>
     </div>
 
+    <div class="openButtonContainer">
+        <button id="openButton">
+            <p>How to play?</p>
+        </button>
+    </div>
+    
+    <div id="modalContainer">
+        <div id="modal">
+            <div id="closeButton">&times;</div>  
+            <h2 id="modalTitle">How to Play</h2>
+            <!-- Pages -->
+            <div class="modalPage" data-page="1">
+                
+                <h3>DECK AND THE DATE</h3>
+                <p>Every single day you get 16 cards randomly shuffled.</p>
+
+                <div class="dataPickerContainer modalVersion" >
+                    <label id="gameDateText">Select Date:</label>
+                    <input type="date" max="">
+                </div>
+                <p>Every day will be same for everyone so you can go back and play previous days. Use this section to pick a date. If you don't pick a date it will default to today's game!</p>
+            </div>
+            <div class="modalPage" data-page="2">
+                <h3>THE CARDS</h3>
+                <p>Every single day your deck will consist of:</p>
+                <ul>
+                    <li>
+                        <div class="card revealed modalVersion" >
+                            <div class="back">F</div>
+                        </div>
+                        <p>5 F's</p>
+                    </li>
+                    <li>
+                        <div class="card revealed modalVersion" >
+                            <div class="back">O</div>
+                        </div>
+                        <p>6 O's</p>
+                    </li>
+                    <li>
+                        <div class="card revealed modalVersion" >
+                            <div class="back">X</div>
+                        </div>
+                        <p>5 X's</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="modalPage" data-page="3">
+                <h3>Choose a Card to play</h3>
+                <p>Choose a card by clicking on it. The dancing card is the one you chose.</p>
+                <ul>
+                    <li>
+                        <div class="card revealed modalClickedCard" >
+                            <div class="front">
+                                <span class="material-symbols-outlined large-icon">
+                                    group_work
+                                </span>
+                                </div>
+                        </div>
+                    </li>
+                
+                </ul>
+                <p>Click on an empty grid space to move the card to that space. If you want to de-select that one, choose another card or just click on it once again.</p>
+
+            </div>
+            <div class="modalPage" data-page="4">
+                <h3><span style="color: #EB5E28">Fox</span>es can come in many forms</h3>
+                <div class="modalGridContainer">
+                    <div class="modalGrid">
+                        <div class="modalGridItem" style="background-color: rgb(196, 66, 66);"><p>F</p></div>
+                        <div class="modalGridItem" style="background-color: rgb(196, 66, 66);"><p>O</p></div>
+                        <div class="modalGridItem" style="background-color: rgb(196, 66, 66);"><p>X</p></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+
+                        
+                    </div>
+              
+            
+                </div>
+                <p>This is a <span style="color: #EB5E28">fox</span></p>
+            </div>
+            <div class="modalPage" data-page="5">
+                <div class="modalGridContainer">
+                    <div class="modalGrid">
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem" style="background-color: rgb(196, 66, 66);"><p>X</p></div>
+                        <div class="modalGridItem" style="background-color: rgb(196, 66, 66);"><p>O</p></div>
+                        <div class="modalGridItem" style="background-color: rgb(196, 66, 66);"><p>F</p></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+
+                        
+                    </div>
+              
+            
+                </div>
+                <p>This is also a <span style="color: #EB5E28">fox</span></p>
+            </div>
+            <div class="modalPage"data-page="6">
+                <div class="modalGridContainer">
+                    <div class="modalGrid">
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem" style="background-color: rgb(196, 135, 66);"><p>F</p></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem" style="background-color: rgb(196, 66, 66);"><p>X</p></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem" style="background-color: rgb(196, 135, 66);"><p>O</p></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem" style="background-color: rgb(196, 66, 66);"><p>O</p></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem" style="background-color: rgb(196, 135, 66);"><p>X</p></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem"></div>
+                        <div class="modalGridItem" style="background-color: rgb(196, 66, 66);"><p>F</p></div>
+                        <div class="modalGridItem"></div>
+
+                        
+                    </div>
+              
+                </div>
+                <p>These are all <span style="color: #EB5E28;">Fox</span>es</p>
+            </div>
+            <div class="modalPage" data-page="7">
+                <h3>POWER UPS</h3>
+                <p>But do not worry! You are not completely by yourself.<br>You have awesome Power Ups!</p>
+                <div class="explanationContainer">
+                    <div id="revealPowerUpButton" class="containerPU gameOver">
+                        <i class="fa-solid fa-eye"></i>
+                        <p>Reveal A Card</p>
+                    </div>
+                    <p>This bad boy will let you know what's hiding behind a card!</p>
+                </div>
+                  
+
+            </div>
+            <div class="modalPage" data-page="8">
+                <h3>POWER UPS</h3>
+                <p>And this one will show you what kind of cards you have in your hand.<br>
+                Don't forget you can use them only once!
+                </p>
+                <div class="explanationContainer">
+                    <div id="revealPowerUpButton" class="containerPU gameOver modalPU">
+                        <i class="fa-solid fa-percent"></i>
+                        <p>Feel Your Cards</p>
+                    </div>
+                    <p>Now that you know how to play the game.<br><span style="font-weight: bold;">remember this:</span> </p>
+                </div>
+                  
+
+            </div>
+            <div class="modalPage" data-page="9">
+
+                    <h2>Do Not Find The <br><span id="fox">Fox</span></h2>
+                    <p>and have fun...</p>
+
+            </div>
+    
+            <!-- Navigation -->
+            <div id="modalFooter">
+                <button id="prevButton" disabled>Previous</button>
+                <span id="pageIndicator">1 / 3</span>
+                <button id="nextButton">Next</button>
+            </div>
+        </div>
+    </div>
+
     <div class="dataPickerContainer">
         <label id="gameDateText" for="gameDate">Select Date:</label>
         <input type="date" id="gameDate" max="">

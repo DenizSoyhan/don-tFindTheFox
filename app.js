@@ -34,6 +34,59 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+/*MODAL STUFF*/
+var openButton = document.getElementById("openButton");
+var modalContainer = document.getElementById("modalContainer");
+var closeButton = document.getElementById("closeButton");
+
+var prevButton = document.getElementById("prevButton");
+var nextButton = document.getElementById("nextButton");
+var pageIndicator = document.getElementById("pageIndicator");
+
+var pages = document.querySelectorAll(".modalPage");
+let currentPage = 1;
+const totalPages = pages.length;
+
+openButton.addEventListener("click", function () {
+    modalContainer.style.display = "block";
+    updateModal();
+});
+
+closeButton.addEventListener("click", function () {
+    modalContainer.style.display = "none";
+});
+
+window.addEventListener("click", function (e) {
+    if (e.target === modalContainer) {
+        modalContainer.style.display = "none";
+    }
+});
+
+// Update Modal Content
+function updateModal() {
+    pages.forEach((page, index) => {
+        page.classList.toggle("active", index + 1 === currentPage);
+    });
+
+    pageIndicator.textContent = `${currentPage} / ${totalPages}`;
+    prevButton.disabled = currentPage === 1;
+    nextButton.disabled = currentPage === totalPages;
+}
+
+prevButton.addEventListener("click", function () {
+    if (currentPage > 1) {
+        currentPage--;
+        updateModal();
+    }
+});
+
+nextButton.addEventListener("click", function () {
+    if (currentPage < totalPages) {
+        currentPage++;
+        updateModal();
+    }
+});
+
 
 /*GAME FUNCTIONALITY*/
 

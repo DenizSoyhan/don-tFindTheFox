@@ -361,9 +361,9 @@ function showPercents(){
         let second = document.createElement("li");
         let third = document.createElement("li");
 
-        first.textContent = `${Math.round((howManyF / 4) * 100)}% F's`;
-        second.textContent = `${Math.round((howManyO / 4) * 100)}% O's`;
-        third.textContent = `${Math.round((howManyX / 4) * 100)}% X's`;
+        first.textContent = `${Math.round((howManyF / anotherCardsOnHand.length) * 100)}% F's`;
+        second.textContent = `${Math.round((howManyO / anotherCardsOnHand.length) * 100)}% O's`;
+        third.textContent = `${Math.round((howManyX / anotherCardsOnHand.length) * 100)}% X's`;
 
         theList.appendChild(first);
         theList.appendChild(second);
@@ -398,6 +398,7 @@ percentPUButton.addEventListener('click',function(){
 
 
 startTheGameButton.addEventListener('click',function(){
+
     startTheGameButton.style.animation = 'none';
     void startTheGameButton.offsetWidth; // Reflow trigger
     
@@ -410,7 +411,7 @@ startTheGameButton.addEventListener('click',function(){
         datePicker.parentElement.classList.add("hidden");
         dateInfo.classList.remove("hidden");
 
-        dateInfo.innerHTML = `You are playing the game of <br><span style="color: #EB5E28; font-size: 36px;">${betterFormattedDate[2]}-${betterFormattedDate[1]}-${betterFormattedDate[0]}</span><br>Have fun and good luck!`;
+        dateInfo.innerHTML = `You are playing the game of <br><span class="betterFormattedDate" ">${betterFormattedDate[2]}-${betterFormattedDate[1]}-${betterFormattedDate[0]}</span><br>Have fun and good luck!`;
 
         dateInfo.style.animation = "fadeIn 0.5s forwards ease-in"
 
@@ -519,7 +520,7 @@ startTheGameButton.addEventListener('click',function(){
     
 })
 
-})
+}, {once : true} ); //once:true so you can't click more than once and cause the game to break
 
 /* PSEUDO RANDOMIZATION FUNCTIONS*/
 
@@ -615,7 +616,7 @@ function checkGameState(gridItems) {
 
         setTimeout(() => {
             dateInfo.innerHTML = `You <span style="color: red;">LOST</span> the game of <br>
-            <span style="color: #EB5E28; font-size: 36px;">${sameBetterFormattedDate[2]}-${sameBetterFormattedDate[1]}-${sameBetterFormattedDate[0]}</span><br>
+            <span class="betterFormattedDate" ">${sameBetterFormattedDate[2]}-${sameBetterFormattedDate[1]}-${sameBetterFormattedDate[0]}</span><br>
             Refresh the page to play another date!`;
 
         }, 200);
@@ -645,7 +646,7 @@ function checkGameState(gridItems) {
 
         setTimeout(() => {
             dateInfo.innerHTML = `You <span style="color: green;">WON</span> the game of <br>
-            <span style="color: #6bcf40; font-size: 36px;">${sameBetterFormattedDate[2]}-${sameBetterFormattedDate[1]}-${sameBetterFormattedDate[0]}</span><br>
+            <span class="betterFormattedDate" ">${sameBetterFormattedDate[2]}-${sameBetterFormattedDate[1]}-${sameBetterFormattedDate[0]}</span><br>
             Send some screenshots to your friends.`;
 
         }, 400);
